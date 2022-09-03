@@ -10,6 +10,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -19,6 +20,13 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    const AVATARS = [
+        'business_man.svg',
+        'female_mic_support.svg',
+        'female.svg',
+        'male.svg',
+    ];
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -31,6 +39,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @Assert\NotBlank()
      * @Assert\Email()
+     *
+     * @Groups({"user:read"})
      */
     private $email;
 
@@ -63,6 +73,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *      min = 2,
      *      max = 25
      * )
+     *
+     * @Groups({"user:read"})
      */
     private $firstName;
 
@@ -74,12 +86,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *      min = 2,
      *      max = 25
      * )
+     *
+     * @Groups({"user:read"})
      */
     private $lastName;
 
     /**
      * The FullName field will be auto generated from firstName + ' ' + lastName
      * No need to store it in the database
+     *
+     * @Groups({"user:read"})
      */
     private $fullName;
 
@@ -92,6 +108,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string", length=255)
      *
      * @Assert\NotBlank()
+     *
+     * @Groups({"user:read"})
      */
     private $avatar;
 
@@ -110,11 +128,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $updatedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity=Photo::class, mappedBy="user")
+     * @ORM\OneToMany(targetEntity=Photo::class, mappedBy="user", cascade={"persist"})
      *
      * @Assert\Count(
      *      min = 4
      * )
+     *
+     * @Groups({"user:read"})
      */
     private $photos;
 
