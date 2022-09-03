@@ -19,4 +19,10 @@
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
 
+###> PhpStorm ###
 .idea
+###< PhpStorm ###
+
+###> lexik/jwt-authentication-bundle ###
+/config/jwt/*.pem
+###< lexik/jwt-authentication-bundle ###

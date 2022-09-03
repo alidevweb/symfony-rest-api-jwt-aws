@@ -46,6 +46,13 @@ If you get an error that the database exists, that should
 be ok. But if you have problems, completely drop the
 database (`doctrine:database:drop --force`) and try again.
 
+**Generate the SSL keys for JWT**
+```
+php bin/console lexik:jwt:generate-keypair
+```
+
+Your keys will land in config/jwt/private.pem and config/jwt/public.pem (unless you configured a different path).
+
 **Start the built-in web server**
 
 You can use Nginx or Apache, but Symfony's local web server
