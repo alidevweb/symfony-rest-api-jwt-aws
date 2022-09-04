@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Service\UserPhotoUploadHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,7 +20,7 @@ class SecurityController extends AbstractController
     /**
      * @Route("/register", name="app_users_register", methods={"POST"})
      */
-    public function register(Request $request, SerializerInterface $serializer, ValidatorInterface $validator, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager)
+    public function register(Request $request, SerializerInterface $serializer, ValidatorInterface $validator, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager, UserPhotoUploadHelper $userPhotoUploadHelper)
     {
         try {
             /* @var User $user */
@@ -50,6 +51,10 @@ class SecurityController extends AbstractController
 
         $entityManager->persist($user);
         $entityManager->flush();
+
+        // Upload user photos to AWS S3 Bucket
+        // For a better user experience, this should be done async with the Symfony Messenger component
+        $userPhotoUploadHelper->uploadUserPhotosToS3($user);
 
         return $this->json(['message' => 'Created successfully'], 201);
     }
