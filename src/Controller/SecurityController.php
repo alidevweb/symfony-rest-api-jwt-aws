@@ -40,7 +40,7 @@ class SecurityController extends AbstractController
         if (count($errors) > 0) {
             $formattedErrors = [];
             foreach ($errors as $error) {
-                $formattedErrors[] = $error->getPropertyPath() . ' : ' . $error->getMessage();
+                $formattedErrors[] = [$error->getPropertyPath() => $error->getMessage()];
             }
 
             return $this->json(['errors' => $formattedErrors], 422);
